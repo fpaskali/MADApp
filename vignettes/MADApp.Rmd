@@ -1,0 +1,186 @@
+---
+title: "Microarray Data Analysis App User's Guide"
+author: "Filip Paskali"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+bibliography: lit.bib
+vignette: >
+  %\VignetteIndexEntry{MAD App User's Guide}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{utf8}
+---
+
+# Introduction
+
+The MAD App is a shiny application for micro arrays data analysis. It offers various modules, for image acquisition, editing, label loading, background correction with multiple available methods, false positive detection of the spots, post-processing, checkerboard measurement overview and time series plotting.
+
+# Testing our app without installation
+
+The latest (unstable) version of the MAD App can be tested on <https://lfapp.shinyapps.io/MADApp/>
+
+# Installation
+
+The package requires Bioconductor package EBImage, which should be installed first via
+
+```{r, eval=FALSE}
+## Install pacakge BiocManager
+if (!requireNamespace("BiocManager", quietly=TRUE))
+  install.packages("BiocManager")
+
+## Install EBImage with BiocManager
+BiocManager::install("EBImage", update=FALSE)
+```
+
+Linux: For some Linux distribution (e.g. Ubuntu, Fedora), development version of some packages is required. Follow the messages in R console during installation.
+
+For generating the vignette, knitr and rmarkdown packages are required, which can be installed via
+
+```{r, eval=FALSE}
+## Install package knitr
+if (!requireNamespace("knitr", quietly=TRUE))
+  install.packages("knitr")
+
+## Install package rmarkdown
+if (!requireNamespace("rmarkdown", quietly=TRUE))
+  install.packages("rmarkdown")
+```
+
+Finally, one can install package MADApp, where all remaining dependencies will be installed automatically.
+
+-   TODO: Add the instruction how to install it!
+
+# Start Apps
+
+The MAD App can be started with the following command:\
+TODO: Add the command
+
+# Tab 1: Image Editor
+
+## Date of test and ID
+
+In this component, first, the test date can be set. By default, the system date is used. Additionally, a unique ID can be set when working with micro arrays with same data. The date and ID should be unique, in order to add the measurements to the intensity data. Specifying the test date and ID is important step, that is crucial for correct **Time Series** plotting ([Tab 7: Time Series]).
+
+## Load Image or Sample
+
+To start analysis, an image has to be loaded or for trying out the application one can use the provided sample image. After loading, the image is displayed on the main plot and the user can zoom or rotate the image, and finally adjust the grid to proceed with the analysis. For the purpose of demonstration we will use the sample image provided with the package.
+
+### Rotate Image
+
+In the rotation panel a fine rotation can be performed, for maximum 45 degrees in both directions (clockwise and counterclockwise). For more precise control, it is recommended to use arrow keys on your keyboard, after selecting the slider. The image can be also rotated 90 degrees, flipped horizontally and vertically, using respective buttons:
+
+|                             |     |
+|-----------------------------|-----|
+| 90 degrees counterclockwise | -90 |
+| 90 degrees clockwise        | +90 |
+| Flip horizontally           | FH  |
+| Flip vertically             | FV  |
+
+### Grid parameters
+
+In the **Grid parameters** panel, **Number of rows** and **Number of columns** in the grid can be adjusted. Additionally, there are two grid modes, **Rectangular** and **Parallelogram**, covering different types of arrays.
+
+After loading the image, one needs to click on the image and drag to define the selection region on the image. Additionally, one can zoom to the selected region by double-clicking on the selection box on the plot. The zoom level and selection can be reversed by using **Reset** button. Furthermore, the grid parameters can be adjusted before or during the selection. An example of a well selected cropping region is shown in the following screenshot.
+
+TODO insert image of the first tab
+
+By clicking **Apply Grid** button the selected region is cropped and the analysis proceeds to the next step. To undo all changes and start the from scratch analysis, press **Reset** button.
+
+# Tab 2: Annotation
+
+### Load Label File
+
+A comma separated value file (CSV file) containing the annotation information may be loaded here. A annotation information is not mandatory to continue the analysis. The label file should be CSV file, consisting of two columns without header. The first column shows the cell name (e.g. A11), and the second the analyte name. The application now is limited to 30 x 30 matrices, hence the cell name can be any letter / two letters from A to AD (e.g A, B, C ... AA, AB ...), and the number can be any number from 1 to 30. But it can be easily modified to work with 702 x 702.
+
+### Remove Labels
+
+By clicking on this button label information can be removed from the analysis
+
+### Save Labels
+
+Label can be also saved in a CSV File and the file can be later used in another analysis
+
+### Add Analyte
+
+If the users wants to create a analyte list from scratch or want to extend the analyte list with new custom name, this can be done by assigning analyte name and adding it to the list by clicking on **Add Analyte** button. To define an analyte on the grid, first the analyte has to be selected in the Select Analyte element and the desired cell clicked. Multiple cells can be annotated by clicking and dragging a selection box.
+
+When the analyte name is selected in the **Select Analyte** box, the analyte marker(s) will be shown on the grid with green color in the cells where this analyte is present.
+
+## Hide Analyte Markers
+
+Analyte markers on the grid can also be hidden, to have better look of the spots in the original image. This can be done by clicking **Hide analyte markers**. To show them again, **Show analyte markers** should be selected.
+
+When the user is happy with annotation, or if user wants to skip the annotation step **Apply Segmentation** should be click to proceed with the next step.
+
+# Tab 3: Background Correction
+
+### Optional: in case of color images
+
+If the image is a color image, it will be transformed to grayscale. By default, we apply the luminance approach, which converts color to grayscale preserving luminance; that is, the grayscale values are obtained by
+
+0.2126∗R+0.7152∗G+0.0722∗B
+
+where R, G, B stands for the red, green and blue channel of the color image. By selecting mode “gray,” the arithmetic mean of the RGB values is used. Furthermore, the selection of mode “red,” “green” or “blue” allows a color channel-wise analysis of color images.
+
+### Select threshold method and apply
+
+# TODO Fix this part
+
+There are four threshold methods, where the default is Otsu’s method (Otsu 1979). Otsu’s method returns a single intensity threshold that separates pixels into foreground and background. It is equivalent to k-means clustering of the intensity histogram (Liu and Yu 2009). Otsu and Li Li and Tam (1998) are non-parametric, fully automatic algorithms that find the optimal threshold for the image. Additionally, two semi-automatic algorithms, namely Quantile and Triangle (Zack, Rogers, and Latt 1977) were included, to cover different images and cases where automatic threshold results are not ideal. The quantile method is a simple method that computes the specified quantile of all pixel intensities of the segments between the lines (per strip). In most of the images we have analysed so far, Otsu’s method performed very well and better than our quantile method. However, in cases where the lines are unclear and very blurred our quantile method may outperform Otsu’s method. In case of the triangle method an additional offeset (default = 0.2) is added to the computed threshold.
+
+By clicking “APPLY TRESHOLD” the selected threshold method is applied to the segmented images of the selected strip. The upper plots show the pixels that have intensities above the background. The lower plots show the images after background subtraction; see the screenshot below.
+
+The thresholds (top of the page) as well as calculated mean and median intensities of the lines (bottom of the page) in order from top of the strip to the bottom of the strip are shown as well.
+
+# Tab 4: Post-processing
+
+## Optional: False Positive Detection
+
+In the post-processing tab, the cells with false positive spot (produced by either artifacts or spot leakage in the adjacent cell) will be automatically detected by the algorithm and marked on the screen with purple dot. The algorithm is rather simple, it computes the sum of the pixels above the background in each field and compares it with the threshold, if the sum is lower than the threshold the field will be marked as false positive. The fields can be marked directly on the screen by clicking on the respective field. Multiple fields can be marked by grading a selection region.
+
+## Optinal: Scaling
+
+Scaling is another optional step. It uses min max scaling to scale the measurements in a range from 0 to 1. As a minimum an empirical quantile (0.1 probability) is calculated of multiple empty fields, which are specified in **Choose Empty IDs** by specifying the IDs of Negative control or Empty Fields. On the other hand, the maximum is set by calculating empirical quantile (0.9 probability) of multiple positive control fields, which are specified in **Choose Positive Control IDs** with corresponding IDs. After calculation is finished both minimum and maximum value will be shown on the sidebar. In order to use and apply this changes a checker box has to be checked.
+
+Finally, when done with post processing steps, one can add the date to the intensity table by clicking **Add to Data**. MADApp check for if the Date + ID is unique, and if not it will display warning and ask to assign another Date/ID.
+
+## Show Intensity Data
+
+Clicking "SHOW INTENSITY DATA" changes the active tab to Intensity Data.
+
+# Tab 5: Intensity Data
+
+## Load Intensity Data
+
+Instead of generating new data, one can also load already existing intensity data, that was previously generated with MADApp, or with another software respecting the Intensity Data structure.
+
+## Delete Intensity Data
+
+This button can be used to delete the current intensity data and start over.
+
+## Save Intensity Data
+
+The generated intensity data can be saved in CSV file, by clicking **Save Intensity Data**.
+
+# Tab 6: Checkerboard Overview
+
+In this tab, the intensity data can be filtered by Date and ID, and chosen paramater will be presented in a heatmap, to visualize the measured values. Additionaly, the analyte can be selected in order to locate the values and fields where this analyte was measured.
+
+# Tab 7: Time Series
+
+In the last tab we can visualize the parameter measurements of an analyze over period of time. All entries from intensity data are sorted by Date and ID string.
+
+# Required R packages
+
+Our app is dependent on the following R packages:
+
+-   shiny: Web Application Framework for R [@Shiny2020]
+-   shinyjs: Easily Improve the User Experience of Your Shiny Apps in Seconds [@shinyjs.2020]
+-   fs: Cross-Platform File System Operations Based on 'libuv' [@fs.2020]
+-   Bioconductor package EBImage: R package for image processing with applications to cellular phenotypes [@Pau.2010]
+-   DT: A Wrapper of the JavaScript Library 'DataTables' [@DT.2020]
+-   rmarkdown: Dynamic Documents for R [@rmarkdown]
+-   plotly: Collaborative data science [@plotly]
+
+# References
