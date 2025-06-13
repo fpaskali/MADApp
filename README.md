@@ -7,8 +7,8 @@ The repository of the development version of shiny application MADApp
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
 [![Windows](https://badgen.net/badge/icon/windows?icon=windows&label)](https://microsoft.com/windows/)
 
-
-MADApp supports both Linux and Windows platforms.
+## Description
+Microarray Data Analysis Application is an application for a quantification of microarray images.
 
 ## Installation
 To install the required packages, load the project from RStudio and run the following command in the R console:
@@ -41,9 +41,6 @@ To start the application from RStudio, load the project and run the following co
 ```{r}
 shiny::runApp()
 ```
-
-## Description
-Microarray Data Analysis Application is an application for a quantification of microarray images.
 
 ## Preview
 
