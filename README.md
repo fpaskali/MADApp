@@ -1,5 +1,5 @@
 
-### <img src="hex-MADApp.png" alt="drawing" width="200"/> Microarray Data Analysis Application (MADApp)
+## <img src="hex-MADApp.png" alt="drawing" width="200"/> Microarray Data Analysis Application (MADApp)
 The repository of the development version of shiny application MADApp
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
