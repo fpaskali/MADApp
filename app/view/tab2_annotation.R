@@ -61,12 +61,18 @@ server <- function(id, parent_session, array_data) {
   shiny$moduleServer(id, function(input, output, session) {
     show_an <- shiny$reactiveVal(TRUE)
     selected_analyte <- shiny$reactiveVal("")
-    
+
     shiny$observeEvent(input$labelFile, {
-      if (!is.null(input$labelFile$datapath)) {
+      if (is.null(array_data$roi$grid)) {
+        shiny$showNotification("No valid grid present!",
+                               type = "error")
+      } else {
+        if (!is.null(input$labelFile$datapath)) {
         labels <- read_labels(input$labelFile$datapath, array_data$roi$ncols, array_data$roi$nrows)
+        array_data$label_filename <- input$labelFile$name
         array_data$roi$grid <- labels$grid
         array_data$analytes <- labels$analyte_names
+        }
       }
     })
 
@@ -123,7 +129,7 @@ server <- function(id, parent_session, array_data) {
                                          array_data$roi$ncols, array_data$roi$mode)
       shiny$updateTabsetPanel(parent_session, "tabs", selected = "tab3")
     })
-    
+
     shiny$observeEvent(input$labelPlot_click, {
       loc <- get_one_cell(input$labelPlot_click, array_data$roi)
       analyte_name <- match(selected_analyte(), array_data$analytes)

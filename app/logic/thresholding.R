@@ -4,12 +4,16 @@ box::use(
 )
 
 #' @export
-otsu_threshold <- function(image, segmentation_list, conv_mode, otsu_mode) {
-  thresh_data <- NULL
+otsu_threshold <- function(image, segmentation_list, conv_mode, spot_type, otsu_mode) {
   back_thresh <- matrix(nrow = length(segmentation_list), ncol = length(segmentation_list[[1]]))
 
   if (otsu_mode == "global") {
-    if (colorMode(image) > 0) image <- 1 - channel(image, conv_mode)
+    if (colorMode(image) > 0) {
+      image <- channel(image, conv_mode)
+    }
+    if (spot_type == "dark") {
+      image <- 1 - image
+    }
     thr <- otsu(image)
   }
 
@@ -19,7 +23,10 @@ otsu_threshold <- function(image, segmentation_list, conv_mode, otsu_mode) {
     for (x in seq_len(ncol(back_thresh))) {
       segment <- segmentation_list[[y]][[x]]
       if (colorMode(segment) > 0) {
-        segment <- 1 - channel(segment, conv_mode)
+        segment <- channel(segment, conv_mode)
+      }
+      if (spot_type == "dark") {
+        segment <- 1 - segment
       }
       if (otsu_mode == "local") thr <- otsu(segment)
       back_thresh[y, x] <- thr
@@ -33,7 +40,6 @@ otsu_threshold <- function(image, segmentation_list, conv_mode, otsu_mode) {
   mean_intensities <- matrix(NA, nrow = nrow(back_thresh), ncol = ncol(back_thresh))
   median_intensities <- matrix(NA, nrow = nrow(back_thresh), ncol = ncol(back_thresh))
   valid_pixels <- matrix(NA, nrow = nrow(back_thresh), ncol = ncol(back_thresh))
-  false_positives <- matrix(NA, nrow = nrow(back_thresh), ncol = ncol(back_thresh))
 
   img_after_bc <- NULL
   for (y in seq_len(nrow(back_thresh))) {
@@ -41,7 +47,10 @@ otsu_threshold <- function(image, segmentation_list, conv_mode, otsu_mode) {
     for (x in seq_len(ncol(back_thresh))) {
       segment <- segmentation_list[[y]][[x]]
       if (colorMode(segment) > 0) {
-        segment <- 1 - channel(segment, conv_mode)
+        segment <- channel(segment, conv_mode)
+      }
+      if (spot_type == "dark") {
+        segment <- 1 - segment
       }
       signal <- imageData(segment) > back_thresh[y, x]
       corrected_segment <- (segment - back_thresh[y, x]) * signal
@@ -68,8 +77,7 @@ otsu_threshold <- function(image, segmentation_list, conv_mode, otsu_mode) {
 }
 
 #' @export
-quan_threshold <- function(segmentation_list, conv_mode, quant) {
-  thresh_data <- NULL
+quan_threshold <- function(segmentation_list, conv_mode, spot_type, quant) {
   nrows <- length(segmentation_list)
   ncols <- length(segmentation_list[[1]])
   back_thresh <- NULL
@@ -78,7 +86,10 @@ quan_threshold <- function(segmentation_list, conv_mode, quant) {
     for (x in seq_len(ncols)) {
       segment <- segmentation_list[[y]][[x]]
       if (colorMode(segment) > 0) {
-        segment <- 1 - channel(segment, conv_mode)
+        segment <- channel(segment, conv_mode)
+      }
+      if (spot_type == "dark") {
+        segment <- 1 - segment
       }
       back_thresh <- c(back_thresh, as.numeric(segment))
     }
@@ -89,7 +100,6 @@ quan_threshold <- function(segmentation_list, conv_mode, quant) {
   mean_intensities <- matrix(NA, nrow = nrows, ncol = ncols)
   median_intensities <- matrix(NA, nrow = nrows, ncol = ncols)
   valid_pixels <- matrix(NA, nrow = nrows, ncol = ncols)
-  false_positives <- matrix(NA, nrow = nrows, ncol = ncols)
 
   img_above_bg <- NULL
   img_after_bc <- NULL
@@ -99,7 +109,10 @@ quan_threshold <- function(segmentation_list, conv_mode, quant) {
     for (x in seq_len(ncols)) {
       segment <- segmentation_list[[y]][[x]]
       if (colorMode(segment) > 0) {
-        segment <- 1 - channel(segment, conv_mode)
+        segment <- channel(segment, conv_mode)
+      }
+      if (spot_type == "dark") {
+        segment <- 1 - segment
       }
       signal <- imageData(segment) > back_thresh
       corrected_segment <- (segment - back_thresh) * signal

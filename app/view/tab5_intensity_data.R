@@ -7,7 +7,7 @@ box::use(
 #' @export
 ui <- function(id) {
   ns <- shiny$NS(id)
-  shiny$tabPanel("Intensity Data", value = "tab5",
+  shiny$tabPanel("Intensity Table", value = "tab5",
     shiny$sidebarLayout(
       shiny$sidebarPanel(
         width = 3,

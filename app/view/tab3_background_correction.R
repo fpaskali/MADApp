@@ -40,6 +40,13 @@ ui <- function(id) {
         ),
 
         shiny$radioButtons(
+            ns("spotType"),
+            label = ("Spot Type"),
+            choices = c("dark",
+                        "light"),
+            selected = "dark"),
+
+        shiny$radioButtons(
           ns("thresh"),
           label = "Threshold Method",
           choices = c("Otsu", "Quantile"),
@@ -104,11 +111,19 @@ server <- function(id, parent_session, array_data) {
       waiter$show()
       if (input$thresh == "Otsu") {
         array_data$thresh_data <- otsu_threshold(array_data$roi$image, array_data$segment_list,
-                                                 array_data$convMode, input$otsuMode)
+                                                 array_data$convMode, input$spotType,
+                                                 input$otsuMode)
       } else if (input$thresh == "Quantile") {
         array_data$thresh_data <- quan_threshold(array_data$segment_list, array_data$convMode,
-                                                 input$quantile1)
+                                                 input$spotType, input$quantile1)
       }
+      # Save sidebar parameters
+      array_data$thresh_data$params$colorImage <- input$colorImage
+      array_data$thresh_data$params$channel <- input$channel
+      array_data$thresh_data$params$spotType <- input$spotType
+      array_data$thresh_data$params$thresh <- input$thresh
+      array_data$thresh_data$params$otsuMode <- input$otsuMode
+      array_data$thresh_data$params$quantile1 <- input$quantile1
       waiter$hide()
     })
 

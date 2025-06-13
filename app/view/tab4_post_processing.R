@@ -1,10 +1,12 @@
 box::use(
   shiny,
   EBImage[display],
+  reactable[reactable],
 )
 
 box::use(
   app/view/analyte_selector,
+  app/view/generate_report,
   app/logic/gridding[render_grid, get_one_cell],
   app/logic/const[LETTERS_EXT],
   app/logic/utils[quant_minmax_scaling]
@@ -43,7 +45,10 @@ ui <- function(id) {
           shiny$column(4, shiny$numericInput(ns("testId"), label = "ID", value = 1, 
                                              min = 1, max = 999))
         ),
-        shiny$actionButton(ns("addData"), label = "Add To Data"),
+        shiny$fluidRow(
+          shiny$column(6, shiny$actionButton(ns("addData"), label = "Add To Intensty Table")),
+          shiny$column(6, generate_report$ui(ns("generateReport")))
+        ),
         shiny$hr(),
         shiny$actionButton(ns("showIntensData"), "Show Intensity Data")
       ),
@@ -170,6 +175,14 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
       shiny$updateNumericInput(session, "testId", value = array_data$id)
     })
 
+    shiny$observe({
+      array_data$ppParams$emptyCells <- id_list$empty_cells
+      array_data$ppParams$posControl <- id_list$control_cells
+      array_data$ppParams$fp_thresh <- input$fp_thresh
+    })
+    
+    generate_report$server("generateReport", array_data)
+
     shiny$observeEvent(input$addData, {
       if(is.null(array_data$thresh_data)) {
         shiny$showNotification("Intensities not found!", type = "error")
@@ -234,6 +247,7 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
             Mean = as.vector(mean_intensities),
             Median = as.vector(median_intensities),
             Threshold = as.vector(thresh_data))
+          
           intensity_data$df <- rbind(intensity_data$df, df)
           shiny$showNotification("Intensity data added", type = "message")
         } else {

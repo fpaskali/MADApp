@@ -1,0 +1,156 @@
+---
+title: "`r params$title`"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+params:
+  title: "Unnamed Report"
+  reportID: FALSE
+  orgImage: FALSE
+  iePar: FALSE
+  imwGrid: FALSE
+  analyteTable: FALSE
+  bgPar: FALSE
+  bgPlots: FALSE
+  bgTable: FALSE
+  ppPlot: FALSE
+  ppPar: FALSE
+  sessionInfo: FALSE
+---
+```{r echo=FALSE}
+box::use(
+  app/logic/gridding[render_grid],
+  app/logic/labels_io[create_labels_df],
+  app/logic/const[LETTERS_EXT],
+  EBImage[display],
+)
+```
+
+`r if (params$reportID) paste0("Report ID: ", array_data$date, "-", sprintf("%03d", array_data$id))`
+
+`r if (params$orgImage) "## Original Image"`
+```{r echo=FALSE, eval=params$orgImage}
+display(array_data$imageFinal)
+```
+
+`r if (params$iePar) "## Image Editor Parameters"`
+```{r echo=FALSE, eval=params$iePar}
+ie_params <- data.frame(
+  parameters = c("Image Name",
+                 "Grid size",
+                 "Cell size",
+                 "Grid mode"),
+  values = c(array_data$imageName,
+             paste(array_data$roi$ncols, "x", array_data$roi$nrows),
+             paste0(round(array_data$roi$cell_w, 2), "px", " x ",
+                    round(array_data$roi$cell_h, 2), "px"),
+             if (array_data$roi$mode == "rect") "Rectangular" else "Parallelogram")
+)
+ie_params
+```
+
+`r if (params$imwGrid) "## Image with Grid"`
+```{r echo=FALSE, eval=params$imwGrid}
+display(array_data$roi$image, method = "raster", margin = c(0, 32, 0, 0))
+render_grid(array_data$roi$image, array_data$roi$nrows, array_data$roi$ncols, NULL,
+            array_data$roi$mode, analyte_grid = array_data$roi$grid, show_an = FALSE,
+            analyte_names = array_data$analytes, show_checkerboard = TRUE,
+            selected_analyte = FALSE)
+```
+
+`r if (params$analyteTable & !is.null(array_data$analytes)) "## Analyte Table"`
+```{r echo=FALSE, eval=(params$analyteTable & !is.null(array_data$analytes))}
+cat(paste0("Labels filename: ", array_data$label_filename))
+create_labels_df(array_data$roi$grid, array_data$analytes)
+```
+
+`r if (params$bgPlots & !is.null(array_data$thresh_data)) "## Background Correction"`
+```{r echo=FALSE, fig.show='hold', out.width='50%', eval=(params$bgPlots & !is.null(array_data$thresh_data))}
+display(array_data$thresh_data$image_above_bg, method = "raster", margin = c(0, 30, 0, 0))
+render_grid(array_data$thresh_data$image_above_bg, array_data$roi$nrows, array_data$roi$ncols,
+            NULL, array_data$roi$mode, analyte_grid = NULL, analyte_names = NULL,
+            show_checkerboard = TRUE)
+
+display(array_data$thresh_data$image_after_bc, method = "raster", margin = c(0, 30, 0, 0))
+render_grid(array_data$thresh_data$image_above_bg, array_data$roi$nrows, array_data$roi$ncols,
+            NULL, array_data$roi$mode, analyte_grid = NULL, analyte_names = NULL,
+            show_checkerboard = TRUE)
+```
+
+`r if (params$bgTable & !is.null(array_data$thresh_data)) "## Background Correction Table"`
+```{r echo=FALSE, eval=(params$bgTable & !is.null(array_data$thresh_data))}
+bc_df <- data.frame(Cell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
+                                               function(x) {
+                                                 paste0(x, seq_len(array_data$roi$nrows))
+                                                 }
+                                               )),
+                       Threhold = as.vector(array_data$thresh_data$threshold),
+                       Mean = as.vector(array_data$thresh_data$mean_intensities),
+                       Median = as.vector(array_data$thresh_data$median_intensities)
+)
+bc_df
+```
+
+`r if (params$bgPar & !is.null(array_data$thresh_data)) "## Background Correction Parameters"`
+```{r echo=FALSE, eval=(params$bgPar & !is.null(array_data$thresh_data))}
+bc_params <- data.frame(
+  parameters = c(
+    "Color Image",
+    if (array_data$thresh_data$params$colorImage == "Yes") "Channel",
+    "Spot Type",
+    "Threshold Method",
+    if (array_data$thresh_data$params$thresh == "Otsu") "Otsu Mode",
+    if (array_data$thresh_data$params$thresh == "Quantile") "Quantile Probability"
+  ),
+  values = c(
+    array_data$thresh_data$params$colorImage,
+    if (array_data$thresh_data$params$colorImage == "Yes") array_data$thresh_data$params$channel,
+    array_data$thresh_data$params$spotType,
+    array_data$thresh_data$params$thresh,
+    if (array_data$thresh_data$params$thresh == "Otsu") array_data$thresh_data$params$otsuMode,
+    if (array_data$thresh_data$params$thresh == "Quantile") array_data$thresh_data$params$quantile1
+  )
+)
+bc_params
+```
+
+`r if (params$ppPlot & !is.null(array_data$thresh_data)) "## Post-Processing Plot"`
+```{r echo=FALSE, eval=(params$ppPlot & !is.null(array_data$thresh_data))}
+display(array_data$roi$image, method = "raster", margin = c(0, 30, 0, 0))
+render_grid(array_data$roi$image, array_data$roi$nrows, array_data$roi$ncols, NULL,
+  array_data$roi$mode,
+  analyte_grid = array_data$roi$grid,
+  analyte_names = array_data$analytes, show_checkerboard = TRUE,
+  show_fp = TRUE,
+  fp_grid = (array_data$thresh_data$valid_pixels < array_data$ppParams$fp_thresh) *
+    (array_data$thresh_data$valid_pixels > 0),
+  show_id = FALSE,
+  id_list = id_list
+)
+```
+
+`r if (params$ppPar & !is.null(array_data$thresh_data)) "## Post-Processing Parameters"`
+```{r echo=FALSE, eval=(params$ppPar & !is.null(array_data$thresh_data))}
+pp_params <- data.frame(
+  parameters = c(
+    "Empty IDs",
+    "Positive Control IDs",
+    "False Positive Threshold"
+  ),
+  values = c(
+    if (is.null(array_data$ppParams$emptyCells)) "-"
+    else paste(array_data$ppParams$emptyCells, collapse = ", "),
+    if (is.null(array_data$ppParams$posControl)) "-"
+    else paste(array_data$ppParams$posControl, collapse = ", "),
+    array_data$ppParams$fp_thresh
+  )
+)
+pp_params
+```
+
+`r if (params$sessionInfo) "## Session Info"`
+```{r echo=FALSE, warning=FALSE, eval=params$sessionInfo}
+sessionInfo()
+```
+

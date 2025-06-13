@@ -33,11 +33,11 @@ read_labels <- function(datapath, nrows, ncols) {
 }
 
 #' @export
-write_labels <- function(datapath, grid, analytes) {
+create_labels_df <- function(grid, analytes) {
   labels_df <- data.frame()
   if (!is.null(grid)) {
-    for (x in seq_len(grid)) {
-      for (y in seq_len(grid)) {
+    for (x in seq_len(ncol(grid))) {
+      for (y in seq_len(nrow(grid))) {
         pos <- grid[y, x]
         analyte_name <- NA
         if (pos != 0) {
@@ -48,5 +48,11 @@ write_labels <- function(datapath, grid, analytes) {
       }
     }
   }
-  write.table(labels_df, datapath, sep = ",", row.names = FALSE, col.names = FALSE)
+  labels_df
+}
+
+#' @export
+write_labels <- function(datapath, grid, analytes) {
+  write.table(create_labels_df(grid, analytes),
+              datapath, sep = ",", row.names = FALSE, col.names = FALSE)
 }
