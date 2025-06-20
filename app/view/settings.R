@@ -15,7 +15,7 @@ server <- function(id) {
 
     shiny$observeEvent(input$settings, {
       shiny$showModal(shiny$modalDialog(
-        title = "MADApp v0.3 (rhino)",
+        title = "MADApp v1.0 (Rhino)",
         shiny$h4("Settings"),
         shiny$checkboxInput(session$ns("advanced"), "Show advanced options", settings$showAdvanced),
         easyClose = TRUE,
