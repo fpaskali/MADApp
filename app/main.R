@@ -1,10 +1,11 @@
 box::use(
-  shiny[fluidPage, moduleServer, NS, reactiveValues, tabsetPanel, titlePanel],
+  shiny[column, div, fluidPage, fluidRow, moduleServer, NS, reactiveValues, tabsetPanel, titlePanel],
   shinythemes[shinytheme],
 )
 
 box::use(
   app/view/settings,
+  app/view/user_manual,
   app/view/tab1_image_editor,
   app/view/tab2_annotation,
   app/view/tab3_background_correction,
@@ -19,7 +20,13 @@ ui <- function(id) {
   ns <- NS(id)
   fluidPage(theme = shinytheme("lumen"),
     titlePanel("Microarray Data Analysis App"),
-    settings$ui(ns("settings")),
+
+    div(
+      id = "misc-buttons",
+      user_manual$ui(ns("userManual")),
+      settings$ui(ns("settings")),
+    ),
+    
     tabsetPanel(id = ns("tabs"),
       tab1_image_editor$ui(ns("image-editor")),
       tab2_annotation$ui(ns("annotation")),
@@ -43,6 +50,7 @@ server <- function(id) {
     intensity_data <- reactiveValues(df = NULL)
 
     settings <- settings$server("settings")
+    user_manual$server("userManual")
 
     tab1_image_editor$server("image-editor", session, array_data)
     tab2_annotation$server("annotation", session, array_data)

@@ -1,53 +1,16 @@
 ---
-title: "Microarray Data Analysis App User's Guide"
-author: "Filip Paskali"
-date: "`r Sys.Date()`"
+title: "User Manual"
 output:
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Microarray Data Analysis App User's Guide}
+  %\VignetteIndexEntry{User Manual}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{utf8}
 ---
 
-The MADApp is a shiny application for microarrays data analysis. It offers various modules, for image acquisition, editing, label loading, background correction with multiple available methods, false positive detection of the spots, post-processing, checkerboard measurement overview and time series plotting.
-
-## Installation
-To install the required packages, load the project from RStudio and run the following command in the R console:
-```{r eval=FALSE}
-renv::restore()
-```
-Alternatively, you can open terminal in the MADApp root directory, start R and use the same command in R console.
-
-## System dependencies
-Certain R packages require system libraries to be preinstalled. Below are the commands to install these libraries for different Linux distributions:
-
-### Debian/Ubuntu
-
-Use the following command to install the necessary dependencies:
-```{bash eval=FALSE}
-sudo apt install libtiff-dev libfftw3-dev libcurl4-openssl-dev libssl-dev libxml2-dev
-```
-
-### Fedora/RHEL
-
-Use this command to install the dependencies:
-```{bash eval=FALSE}
-sudo dnf install libtiff-devel fftw-devel libcurl-devel openssl-devel libxml2-devel
-```
-
-* If you encounter errors in the installation process or additional dependencies are needed, please open an issue to report them.
-
-## Start App
-To start the application from RStudio, load the project and run the following command in the R console:
-```{r eval=FALSE}
-shiny::runApp()
-```
-
-# User Manual
 ## Introduction
-The Microarray Data Analysis App (MADApp) is designed using a sidebar or two-column layout consisting of a structured side panel and a main visualisation and plotting area. The side panel consolidates all the critical parameters and controls necessary for loading files and fine tuning, enabling the users to dynamically adjust input variables, and modify visualization settings in real-time. On the other hand, the broader main section serves as the primary workspace where users can interact with complex biomedical datasets, explore trends, patterns, and visualize the results in high detail. These foster better visualization and optimize interactivity. The analysis workflow is organised in logical steps, each of which is presented within one of the seven tabs.
+The Microarray Data Analysis App (MADApp) is a shiny application for microarrays data analysis. It offers various modules, for image acquisition, editing, label loading, background correction with multiple available methods, false positive detection of the spots, post-processing, checkerboard measurement overview and time series plotting. It is designed using a sidebar or two-column layout consisting of a structured side panel and a main visualisation and plotting area. The side panel consolidates all the critical parameters and controls necessary for loading files and fine tuning, enabling the users to dynamically adjust input variables, and modify visualization settings in real-time. On the other hand, the broader main section serves as the primary workspace where users can interact with complex biomedical datasets, explore trends, patterns, and visualize the results in high detail. These foster better visualization and optimize interactivity. The analysis workflow is organised in logical steps, each of which is presented within one of the seven tabs.
 
 ## Tab 1: Image Editor
 The first tab contains the image editing module, in which an image can be loaded and adjusted for analysis (Figure 1).

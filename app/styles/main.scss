@@ -1,5 +1,14 @@
-#app-settings-settings {
+#misc-buttons {
   float: right;
+  display: flex;
+  justify-content:flex-end;
+  gap: 10px;
+}
+
+#user-manual-frame {
+  width: 100%;
+  height: 90vh;
+  border: none;
 }
 
 .selected-analyte {
