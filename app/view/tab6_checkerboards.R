@@ -13,11 +13,11 @@ box::use(
 ui <- function(id) {
   ns <- shiny$NS(id)
   shiny$tabPanel(
-    "Checkerboards", 
+    "Array Visualization", 
     value = "tab6",
     shiny$sidebarLayout(
       shiny$sidebarPanel(
-        width = 3,
+        width = 2,
         shiny$selectInput(ns("date"), "Select Date", choices = ""),
         shiny$selectInput(ns("id"), "Select ID", choices = ""),
         shiny$selectInput(ns("param"), "Select Parameter", choices = c("Mean", "Median", "Threshold")),
@@ -25,6 +25,7 @@ ui <- function(id) {
         shiny$checkboxInput(ns("heatmap"), "Color coded matrix", value = FALSE)
         ),
       shiny$mainPanel(
+        width = 10,
         shiny$h3("Intensity Matrices", align = "center"),
         reactableOutput(ns("checkerboard"))
       )
@@ -82,8 +83,8 @@ server <- function(id, parent_session, intensity_data) {
               }
               cell_style
             },
-            format = colFormat(digits = 4),
-            minWidth = 50
+            format = colFormat(digits = 2),
+            minWidth = 60
           ),
           columns = list(
             .rownames = colDef(format = colFormat(digits = 0), minWidth = 30)

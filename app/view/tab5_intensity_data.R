@@ -52,9 +52,11 @@ server <- function(id, parent_session, intensity_data) {
           ),
           columns = list(
             ID = colDef(cell = function(x) sprintf("%03d", x), minWidth = 50),
-            File = colDef(minWidth = 250),
+            File = colDef(minWidth = 200),
             Analyte = colDef(minWidth = 200),
-            Mode = colDef(minWidth = 50),
+            Mode = colDef(minWidth = 100),
+            Method = colDef(minWidth = 60),
+            Probability = colDef(minWidth = 85),
             Cell = colDef(minWidth = 50)
           ),
           bordered = TRUE,

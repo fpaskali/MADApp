@@ -87,7 +87,7 @@ ui <- function(id) {
 }
 
 #' @export
-server <- function(id, parent_session, array_data) {
+server <- function(id, parent_session, array_data, settings) {
   shiny$moduleServer(id, function(input, output, session) {
 
     shiny$observeEvent(input$testdate, {
@@ -173,6 +173,16 @@ server <- function(id, parent_session, array_data) {
         shiny$showNotification("Grid out of boundaries.", type = "error")
       }
     })
+
+    shiny$observe(
+      if (settings$bigGrid) {
+        shiny$updateSliderInput(session, "array_nrows", max = 50)
+        shiny$updateSliderInput(session, "array_ncols", max = 50)
+      } else {
+        shiny$updateSliderInput(session, "array_nrows", max = 30)
+        shiny$updateSliderInput(session, "array_ncols", max = 30)
+      }
+    )
 
     # Buttons --------------------------------------------------------------------------------------
     shiny$observeEvent(input$reset, {

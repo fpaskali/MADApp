@@ -19,7 +19,7 @@ box::use(
 ui <- function(id) {
   ns <- NS(id)
   fluidPage(theme = shinytheme("lumen"),
-    titlePanel("Microarray Data Analysis App"),
+    titlePanel("Microarray Data Analysis Application"),
 
     div(
       id = "misc-buttons",
@@ -52,7 +52,7 @@ server <- function(id) {
     settings <- settings$server("settings")
     user_manual$server("userManual")
 
-    tab1_image_editor$server("image-editor", session, array_data)
+    tab1_image_editor$server("image-editor", session, array_data, settings)
     tab2_annotation$server("annotation", session, array_data)
     tab3_background_correction$server("background-correction", session, array_data)
     tab4_post_processing$server("post-processing", session, array_data, intensity_data, settings)
