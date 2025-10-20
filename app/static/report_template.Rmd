@@ -123,8 +123,7 @@ render_grid(array_data$roi$image, array_data$roi$nrows, array_data$roi$ncols, NU
   analyte_grid = array_data$roi$grid,
   analyte_names = array_data$analytes, show_checkerboard = TRUE,
   show_fp = TRUE,
-  fp_grid = (array_data$thresh_data$valid_pixels < array_data$ppParams$fp_thresh) *
-    (array_data$thresh_data$valid_pixels > 0),
+  fp_grid = array_data$ppParams$fp_grid,
   show_id = FALSE,
   id_list = id_list
 )

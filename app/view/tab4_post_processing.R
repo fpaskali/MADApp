@@ -81,8 +81,11 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
     shiny$observe({
       id_list$empty_cells <- analyte_selector$server("emptyCells", array_data$analytes, FALSE)
       id_list$control_cells <- analyte_selector$server("posControl", array_data$analytes, FALSE)
+    })
+
+    shiny$observe({
       false_positives((array_data$thresh_data$valid_pixels < input$fp_thresh) *
-                        (array_data$thresh_data$valid_pixels > 0))
+                  (array_data$thresh_data$valid_pixels > 0))
     })
 
     shiny$observe({
@@ -158,6 +161,7 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
         loc <- get_one_cell(input$postProcessPlot_click, array_data$roi)
         tmp_df <- false_positives()
         if (tmp_df[loc$y, loc$x] == 1) tmp_df[loc$y, loc$x] <- 0 else tmp_df[loc$y, loc$x] <- 1
+        array_data$ppParams$fp_grid <- tmp_df
         false_positives(tmp_df)
       }
     })

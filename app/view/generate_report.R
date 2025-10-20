@@ -22,7 +22,7 @@ server <- function(id, array_data) {
     shiny$observeEvent(input$showReportModal, {
       if (!is.null(array_data$roi)) {
         shiny$showModal(shiny$modalDialog(
-        title = "Here comes Report Generation Modal Dialog",
+        title = "Create Analysis Report",
         shiny$textInput(session$ns("reportName"), "Report Name", "Unnamed Report"),
         shiny$checkboxGroupInput(session$ns("reportOpts"), "Report",
           choices = list("Report ID" = "reportID", "Original Image" = "orgImage",
@@ -59,6 +59,7 @@ server <- function(id, array_data) {
         tempReport <- file.path(tempdir(), "temp_report.Rmd")
         file.copy("app/static/report_template.Rmd", tempReport, overwrite = TRUE)
         
+        shiny$removeModal()
         render(
           input = tempReport,
           output_file = file,
