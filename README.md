@@ -40,7 +40,7 @@ shiny::runApp()
 ```
 
 ## AppImage
-The AppImage version of MADApp can be downloaded [here](https://drive.google.com/file/d/1KJP6Bg_zwoOolSoX9CNFqNU1THlLA3Ge/view?usp=drive_link) and run without any installation.
+The AppImage version of MADApp can be downloaded [here](https://drive.google.com/file/d/1eo3csoBYznMSmOJwfqyAW2l-q5GaR3CM/view?usp=drive_link) and run without any installation.
 
 Before using it, make sure the file has execution permission. The execution permission can be added by executing this command:
 ```bash
@@ -71,4 +71,5 @@ The AppImage has been tested on several popular Linux distributions, including U
 ![tab5](preview/preview5.png)
 ![tab6](preview/preview6.png)
 ![tab7](preview/preview7.png)
+
 
