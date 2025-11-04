@@ -44,14 +44,14 @@ The AppImage version of MADApp can be downloaded [here](https://drive.google.com
 
 Before using it, make sure the file has execution permission. The execution permission can be added by executing this command:
 ```bash
-chmod +x MADApp-x86_64.AppImage
+chmod +x MADApp-x86_64_v1.0.1.AppImage
 ```
 (Alternatively, execution permission can be enabled via the file's Properties dialog in a file manager.)
 
 To start the AppImage version, either:
 * Run it from a terminal:
 ```bash
-./MADApp-x86_64.AppImage
+./MADApp-x86_64_v1.0.1.AppImage
 ```
 * Or double-click the file in a file manager (after setting execution permissions).
 
@@ -71,5 +71,6 @@ The AppImage has been tested on several popular Linux distributions, including U
 ![tab5](preview/preview5.png)
 ![tab6](preview/preview6.png)
 ![tab7](preview/preview7.png)
+
 
 
