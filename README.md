@@ -2,7 +2,7 @@
 ## <img src="hex-MADApp.png" alt="drawing" width="200"/> Microarray Data Analysis Application (MADApp)
 The repository of Microarray Data Analysis Application, an application for a quantification of microarray images.
 
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![License: GPLv3](https://img.shields.io/badge/License-GPLv3-659DA3.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
 [![Windows](https://badgen.net/badge/icon/windows?icon=windows&label)](https://microsoft.com/windows/)
@@ -71,6 +71,7 @@ The AppImage has been tested on several popular Linux distributions, including U
 ![tab5](preview/preview5.png)
 ![tab6](preview/preview6.png)
 ![tab7](preview/preview7.png)
+
 
 
 
