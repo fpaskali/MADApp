@@ -68,10 +68,10 @@ server <- function(id, parent_session, array_data) {
                                type = "error")
       } else {
         if (!is.null(input$labelFile$datapath)) {
-        labels <- read_labels(input$labelFile$datapath, array_data$roi$ncols, array_data$roi$nrows)
-        array_data$label_filename <- input$labelFile$name
-        array_data$roi$grid <- labels$grid
-        array_data$analytes <- labels$analyte_names
+          labels <- read_labels(input$labelFile$datapath, array_data$roi$ncols, array_data$roi$nrows)
+          array_data$label_filename <- input$labelFile$name
+          array_data$roi$grid <- labels$grid
+          array_data$analytes <- labels$analyte_names
         }
       }
     })

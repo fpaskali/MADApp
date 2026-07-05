@@ -80,7 +80,7 @@ render_grid(array_data$thresh_data$image_above_bg, array_data$roi$nrows, array_d
 
 `r if (params$bgTable & !is.null(array_data$thresh_data)) "## Background Correction Table"`
 ```{r echo=FALSE, eval=(params$bgTable & !is.null(array_data$thresh_data))}
-bc_df <- data.frame(Cell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
+bc_df <- data.frame(GridCell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
                                                function(x) {
                                                  paste0(x, seq_len(array_data$roi$nrows))
                                                  }

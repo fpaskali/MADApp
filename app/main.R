@@ -13,6 +13,7 @@ box::use(
   app/view/tab5_intensity_data,
   app/view/tab6_checkerboards,
   app/view/tab7_timeseries,
+  app/view/tab8_calibration,
 )
 
 #' @export
@@ -34,7 +35,8 @@ ui <- function(id) {
       tab4_post_processing$ui(ns("post-processing")),
       tab5_intensity_data$ui(ns("intensity-data")),
       tab6_checkerboards$ui(ns("checkerboards")),
-      tab7_timeseries$ui(ns("timeseries"))
+      tab7_timeseries$ui(ns("timeseries")),
+      tab8_calibration$ui(ns("calibration"))
     )
   )
 }
@@ -59,5 +61,6 @@ server <- function(id) {
     tab5_intensity_data$server("intensity-data", session, intensity_data)
     tab6_checkerboards$server("checkerboards", session, intensity_data)
     tab7_timeseries$server("timeseries", session, intensity_data)
+    tab8_calibration$server("calibration", session, intensity_data)
   })
 }

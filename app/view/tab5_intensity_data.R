@@ -57,7 +57,7 @@ server <- function(id, parent_session, intensity_data) {
             Mode = colDef(minWidth = 100),
             Method = colDef(minWidth = 60),
             Probability = colDef(minWidth = 85),
-            Cell = colDef(minWidth = 50)
+            GridCell = colDef(minWidth = 60)
           ),
           bordered = TRUE,
           defaultPageSize = 20,

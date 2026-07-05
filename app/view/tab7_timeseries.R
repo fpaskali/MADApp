@@ -55,13 +55,13 @@ server <- function(id, parent_session, intensity_data) {
         tmp_df <- tmp_df[tmp_df$Analyte == selected,]
 
         if (nrow(tmp_df) != 0) {
-          if (length(unique(tmp_df$Cell)) != 1) {
+          if (length(unique(tmp_df$GridCell)) != 1) {
             averaged <- aggregate(tmp_df$Mean, list(tmp_df$Timeline), FUN=mean)
             names(averaged) <- c("Timeline", "avg")
             tmp_df <- merge(x = tmp_df, y = averaged, by = "Timeline", all = TRUE)
           }
 
-          p <- ggplot(tmp_df, aes(x=Timeline, y=.data[[input$param]], group=Cell, color=Cell)) +
+          p <- ggplot(tmp_df, aes(x=Timeline, y=.data[[input$param]], group=GridCell, color=GridCell)) +
           geom_line() +
           theme_light() + 
           theme(axis.text.x = element_text(angle = 45, hjust = 1))

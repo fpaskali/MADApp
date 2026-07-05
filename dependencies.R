@@ -1,9 +1,12 @@
 # This file allows packrat (used by rsconnect during deployment) to pick up dependencies.
 library(EBImage)
+library(ggpubr)
 library(plotly)
 library(reactable)
 library(rhino)
 library(shinyjs)
 library(shinythemes)
 library(shinyWidgets)
+library(treesitter)
+library(treesitter.r)
 library(waiter)
