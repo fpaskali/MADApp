@@ -14,7 +14,6 @@ ui <- function(id) {
         shiny$fileInput(ns("intensDataFile"),
                   label = "Load Intensity Data File",
                   accept = c("text/csv")),
-        shiny$hr(),
         shiny$fluidRow(
           shiny$column(
             shiny$actionButton(ns("deleteData"), label = "Delete Intensity Data", width = "100%"), 
@@ -22,13 +21,6 @@ ui <- function(id) {
           shiny$column(
             shiny$downloadButton(ns("downloadData"), "Save Intensity Data", width = "100%"),
             width = 6)
-        ),
-        shiny$hr(),
-        shiny$fluidRow(
-          shiny$column(
-            shiny$downloadButton(ns("report"), "Save Report"),
-            width = 6
-          )
         )
       ),
       shiny$mainPanel(
