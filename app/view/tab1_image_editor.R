@@ -200,12 +200,17 @@ server <- function(id, parent_session, array_data, settings) {
             brush_roi$xmax <= dim(array_data$imageFinal)[1] &&
             brush_roi$ymax <= dim(array_data$imageFinal)[2]) {
         array_data$roi$image <- crop_image(array_data$imageFinal, brush_roi)
-        array_data$roi$ncols <- input$array_ncols
-        array_data$roi$nrows <- input$array_nrows
         array_data$roi$cell_w <- (brush_roi$xmax - brush_roi$xmin) / input$array_ncols
         array_data$roi$cell_h <- (brush_roi$ymax - brush_roi$ymin) / input$array_nrows
         array_data$roi$mode <- input$roi_mode
-        array_data$roi$grid <- matrix(0, nrow = input$array_nrows, ncol = input$array_ncols)
+        
+        # Only remove the labels if grid size is different. They can be anyway removed in the second tab with *Remove Labels*
+        if (!isTRUE(array_data$roi$ncols == input$array_ncols) ||
+            !isTRUE(array_data$roi$nrows == input$array_nrows)) {
+          array_data$roi$ncols <- input$array_ncols
+          array_data$roi$nrows <- input$array_nrows
+          array_data$roi$grid <- matrix(0, nrow = input$array_nrows, ncol = input$array_ncols)
+        }
 
         # Reset old threshold data
         array_data$thresh_data <- NULL

@@ -1,5 +1,6 @@
 box::use(
   shiny,
+  shinyjs[disable, enable],
   utils[read.csv, write.csv],
   reactable[colDef, colFormat, reactable, reactableOutput, renderReactable],
 )
@@ -35,6 +36,16 @@ ui <- function(id) {
 #' @export
 server <- function(id, parent_session, intensity_data) {
   shiny$moduleServer(id, function(input, output, session) {
+    calModel <- shiny$reactiveVal()
+    
+    shiny$observe({
+      if (is.null(intensity_data$df)) {
+        disable(session$ns("downloadData"), asis = TRUE)
+      } else {
+        enable(session$ns("downloadData"), asis = TRUE)
+      }
+    })
+    
     shiny$observe({
       output$intensityDT <- renderReactable({
         shiny$validate(shiny$need(intensity_data$df, "No intensity data found!"))

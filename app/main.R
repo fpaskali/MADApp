@@ -1,5 +1,6 @@
 box::use(
   shiny[column, div, fluidPage, fluidRow, moduleServer, NS, reactiveValues, tabsetPanel, titlePanel],
+  shinyjs[useShinyjs],
   shinythemes[shinytheme],
 )
 
@@ -21,7 +22,9 @@ ui <- function(id) {
   ns <- NS(id)
   fluidPage(theme = shinytheme("lumen"),
     titlePanel("Microarray Data Analysis Application"),
-
+    
+    useShinyjs(),
+    
     div(
       id = "misc-buttons",
       user_manual$ui(ns("userManual")),

@@ -1,6 +1,8 @@
 # This file allows packrat (used by rsconnect during deployment) to pick up dependencies.
+library(bslib)
 library(EBImage)
 library(ggpubr)
+library(mgcv)
 library(plotly)
 library(reactable)
 library(rhino)

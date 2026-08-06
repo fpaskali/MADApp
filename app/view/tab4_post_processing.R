@@ -1,5 +1,6 @@
 box::use(
   shiny,
+  dplyr[bind_rows, mutate],
   EBImage[display],
   reactable[reactable],
 )
@@ -236,7 +237,7 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
         if (!input$toScale || (!is.null(mean_intensities) && !is.null(median_intensities) &&
                                !is.null(id_list$empty_cells) && !is.null(id_list$control_cells))) {
           df <- data.frame(
-            Date = array_data$date,
+            Date = as.Date(array_data$date),
             ID = array_data$id,
             File = array_data$imageName,
             Mode = array_data$convMode,
@@ -251,8 +252,13 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
             Mean = as.vector(mean_intensities),
             Median = as.vector(median_intensities),
             Threshold = as.vector(thresh_data))
-          
-          intensity_data$df <- rbind(intensity_data$df, df)
+          if (is.null(intensity_data$df)) {
+            intensity_data$df <- df
+          } else {
+            intensity_data$df <- intensity_data$df |>
+              mutate(Date = as.Date(Date)) |> 
+              bind_rows(df)
+          }
           shiny$showNotification("Intensity data added", type = "message")
         } else {
           shiny$showNotification("Intensities cannot be scaled!", type = "error")
