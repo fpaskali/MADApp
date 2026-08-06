@@ -76,11 +76,11 @@ render_grid <- function(image, nrows, ncols, roi = NULL, grid_mode = "rect", ana
           text(x = colcuts[cell_x], y = anno_y, adj = anno_adj,
                label = "✱", col = anno_col, cex = 0.8)
         } else if (!is.null(analyte_names) && show_id && !is.null(id_list)) {
-          if (analyte_names[analyte_id] %in% id_list$empty_cells) {
+          if (isTRUE(analyte_names[analyte_id] %in% id_list$empty_cells)) {
             text(x = colcuts[cell_x], y = anno_y, adj = anno_adj,
                  label = "E", col = "darkblue")
           }
-          if (analyte_names[analyte_id] %in% id_list$control_cells) {
+          if (isTRUE(analyte_names[analyte_id] %in% id_list$control_cells)) {
             text(x = colcuts[cell_x], y = anno_y, adj = anno_adj,
                  label = "C", col = "darkgreen")
           }

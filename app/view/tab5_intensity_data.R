@@ -1,5 +1,6 @@
 box::use(
   shiny,
+  shinyjs[disable, enable],
   utils[read.csv, write.csv],
   reactable[colDef, colFormat, reactable, reactableOutput, renderReactable],
 )
@@ -14,7 +15,6 @@ ui <- function(id) {
         shiny$fileInput(ns("intensDataFile"),
                   label = "Load Intensity Data File",
                   accept = c("text/csv")),
-        shiny$hr(),
         shiny$fluidRow(
           shiny$column(
             shiny$actionButton(ns("deleteData"), label = "Delete Intensity Data", width = "100%"), 
@@ -22,13 +22,6 @@ ui <- function(id) {
           shiny$column(
             shiny$downloadButton(ns("downloadData"), "Save Intensity Data", width = "100%"),
             width = 6)
-        ),
-        shiny$hr(),
-        shiny$fluidRow(
-          shiny$column(
-            shiny$downloadButton(ns("report"), "Save Report"),
-            width = 6
-          )
         )
       ),
       shiny$mainPanel(
@@ -43,6 +36,16 @@ ui <- function(id) {
 #' @export
 server <- function(id, parent_session, intensity_data) {
   shiny$moduleServer(id, function(input, output, session) {
+    calModel <- shiny$reactiveVal()
+    
+    shiny$observe({
+      if (is.null(intensity_data$df)) {
+        disable(session$ns("downloadData"), asis = TRUE)
+      } else {
+        enable(session$ns("downloadData"), asis = TRUE)
+      }
+    })
+    
     shiny$observe({
       output$intensityDT <- renderReactable({
         shiny$validate(shiny$need(intensity_data$df, "No intensity data found!"))
@@ -57,7 +60,7 @@ server <- function(id, parent_session, intensity_data) {
             Mode = colDef(minWidth = 100),
             Method = colDef(minWidth = 60),
             Probability = colDef(minWidth = 85),
-            Cell = colDef(minWidth = 50)
+            GridCell = colDef(minWidth = 60)
           ),
           bordered = TRUE,
           defaultPageSize = 20,

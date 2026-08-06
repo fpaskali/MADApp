@@ -159,7 +159,7 @@ server <- function(id, parent_session, array_data) {
 
     output$threshData <- renderReactable({
       shiny$validate(shiny$need(array_data$thresh_data, ""))
-      df <- data.frame(Cell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
+      df <- data.frame(GridCell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
                                                function(x) {
                                                  paste0(x, seq_len(array_data$roi$nrows))
                                                  }

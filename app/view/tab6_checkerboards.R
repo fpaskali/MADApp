@@ -54,7 +54,7 @@ server <- function(id, parent_session, intensity_data) {
                                       intensity_data$df$ID == input$id,]
         selected <- analyte_selector$server("analyteSelector", unique(tmp_df$Analyte), TRUE)
 
-        cells <- strsplit(tmp_df$Cell, split = "(?<=[a-zA-Z])\\s*(?=[0-9])", perl = TRUE)
+        cells <- strsplit(tmp_df$GridCell, split = "(?<=[a-zA-Z])\\s*(?=[0-9])", perl = TRUE)
   
         shiny$validate(shiny$need(length(cells) != 0, ""))
         cols <- as.integer(match(cells[[length(cells)]][1], LETTERS_EXT))
@@ -78,7 +78,7 @@ server <- function(id, parent_session, intensity_data) {
                                       (max(tmp_table, na.rm = TRUE) - min(tmp_table, na.rm = TRUE)))
               }
               if (input$heatmap) cell_style <- list(background = color) else cell_style <- list()
-              if (selected != "" && tmp_df[tmp_df$Cell == paste0(col, index),]$Analyte == selected) {
+              if (selected != "" && tmp_df[tmp_df$GridCell == paste0(col, index),]$Analyte == selected) {
                 cell_style$border <- "1px solid red"
               }
               cell_style

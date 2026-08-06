@@ -1,5 +1,6 @@
 box::use(
   shiny,
+  dplyr[bind_rows, mutate],
   EBImage[display],
   reactable[reactable],
 )
@@ -93,7 +94,7 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
         output$advanced1 <- shiny$renderUI({
           shiny$numericInput(
             inputId = session$ns("LOBquant"),
-            label = "Empty Cells Quantile:",
+            label = "Empty Grid Cells Quantile:",
             value = 0.9,
             min = 0.1,
             max = 1,
@@ -218,7 +219,7 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
                                                      array_data$analytes, id_list$empty_cells,
                                                      id_list$control_cells, high_quant, low_quant)
           } else {
-            shiny$showNotification("Empty and positive control cells are not specified!",
+            shiny$showNotification("Empty and positive control grid cells are not specified!",
                                    type = "error")
           }
         }
@@ -236,13 +237,13 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
         if (!input$toScale || (!is.null(mean_intensities) && !is.null(median_intensities) &&
                                !is.null(id_list$empty_cells) && !is.null(id_list$control_cells))) {
           df <- data.frame(
-            Date = array_data$date,
+            Date = as.Date(array_data$date),
             ID = array_data$id,
             File = array_data$imageName,
             Mode = array_data$convMode,
             Method = array_data$thresh_data$method,
             Probability = if (is.null(array_data$thresh_data$prob)) NA else array_data$thresh_data$prob,
-            Cell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
+            GridCell = as.vector(sapply(LETTERS_EXT[seq_len(array_data$roi$ncols)],
                                     function(x) {
                                       paste0(x, seq_len(array_data$roi$nrows))
                                     })),
@@ -251,8 +252,13 @@ server <- function(id, parent_session, array_data, intensity_data, settings) {
             Mean = as.vector(mean_intensities),
             Median = as.vector(median_intensities),
             Threshold = as.vector(thresh_data))
-          
-          intensity_data$df <- rbind(intensity_data$df, df)
+          if (is.null(intensity_data$df)) {
+            intensity_data$df <- df
+          } else {
+            intensity_data$df <- intensity_data$df |>
+              mutate(Date = as.Date(Date)) |> 
+              bind_rows(df)
+          }
           shiny$showNotification("Intensity data added", type = "message")
         } else {
           shiny$showNotification("Intensities cannot be scaled!", type = "error")
