@@ -15,7 +15,7 @@ server <- function(id) {
 
     shiny$observeEvent(input$settings, {
       shiny$showModal(shiny$modalDialog(
-        title = "MADApp v1.0.1",
+        title = "MADApp v1.2.0",
         shiny$h4("Settings"),
         shiny$checkboxInput(session$ns("advanced"), "Show advanced options", settings$showAdvanced),
         shiny$checkboxInput(session$ns("bigGrid"), "Increase the grid size to 50x50", settings$bigGrid),
