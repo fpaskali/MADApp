@@ -134,7 +134,11 @@ knitr::include_graphics("../preview/preview7.png")
 ```
 
 # Tab 8: Calibration
-In the calibration tab, one can fit a new model or use an existing one to transform the measured intensities into the measurement scale of a reference device, such as a state-of-the-art gold-standard instrument. The date and ID of the microarray should be specified in the sidebar, together with the fitting variable (**Mean** or **Median Intensity**). One can then choose to fit a new model or calibrate with an existing one.
+In the calibration tab (Figure 8), one can fit a new model or use an existing one to transform the measured intensities into the measurement scale of a reference device, such as a state-of-the-art gold-standard instrument. The date and ID of the microarray should be specified in the sidebar, together with the fitting variable (**Mean** or **Median Intensity**). One can then choose to fit a new model or calibrate with an existing one.
+
+```{r, echo=FALSE, fig.align='center', out.width='100%', fig.cap="Figure 7: Overview of calibration tab"}
+knitr::include_graphics("../preview/preview8.png")
+```
 
 ## Fit Model
 This option should be chosen to fit a model using measured intensities and reference intensities.

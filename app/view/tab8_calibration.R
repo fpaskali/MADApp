@@ -229,7 +229,7 @@ server <- function(id, parent_session, intensity_data) {
             )
             
           }
-          p + stat_cor(method = "spearman", output.type = "latex", label.x.npc = 0.10)
+          p <- p + stat_cor(method = "spearman", output.type = "latex", label.x.npc = 0.10)
           calPlot(p)
           if (input$calModelType == "loess") {
             calModel(loess(Mean.ref ~ Mean.app, data = tmp_df))

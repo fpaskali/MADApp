@@ -142,7 +142,8 @@ server <- function(id, parent_session, array_data) {
     output$plot3 <- shiny$renderPlot({
       shiny$validate(shiny$need(array_data$segment_list, "Not valid segmentation list found!"))
       shiny$validate(shiny$need(array_data$thresh_data, "Background correction not applied"))
-      display(array_data$thresh_data$image_above_bg, method = "raster", margin = c(0, 20, 0, 0))
+      display(array_data$thresh_data$image_above_bg, method = "raster",
+              margin = c(0, array_data$roi$nrows + 5, 0, 0))
       render_grid(array_data$thresh_data$image_above_bg, array_data$roi$nrows, array_data$roi$ncols,
                   NULL, array_data$roi$mode, analyte_grid = NULL, analyte_names = NULL,
                   show_checkerboard = TRUE)
@@ -151,7 +152,8 @@ server <- function(id, parent_session, array_data) {
     output$plot4 <- shiny$renderPlot({
       shiny$validate(shiny$need(array_data$segment_list, ""))
       shiny$validate(shiny$need(array_data$thresh_data, ""))
-      display(array_data$thresh_data$image_after_bc, method = "raster", margin = c(0, 20, 0, 0))
+      display(array_data$thresh_data$image_after_bc, method = "raster",
+              margin = c(0, array_data$roi$nrows + 5, 0, 0))
       render_grid(array_data$thresh_data$image_above_bg, array_data$roi$nrows, array_data$roi$ncols,
                   NULL, array_data$roi$mode, analyte_grid = NULL, analyte_names = NULL,
                   show_checkerboard = TRUE)
