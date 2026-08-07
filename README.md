@@ -71,6 +71,7 @@ The AppImage has been tested on several popular Linux distributions, including U
 ![tab5](preview/preview5.png)
 ![tab6](preview/preview6.png)
 ![tab7](preview/preview7.png)
+![tab8](preview/preview8.png)
 
 
 
